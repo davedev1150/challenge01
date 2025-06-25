@@ -3,8 +3,8 @@ import { caller } from "@/lib/trpc/server";
 import { ProductsTable } from "./_components/table";
 
 export default async function Home() {
-	const { products } = await caller.getAllProducts();
 	const { stats } = await caller.getLatestProductStats();
+	const { products } = await caller.getAllProducts();
 
 	return (
 		<div className="container mx-auto px-4 py-8">
