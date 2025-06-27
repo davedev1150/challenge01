@@ -2,7 +2,8 @@
 
 import { useRef, useEffect } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { trpc } from "@/lib/trpc/client";
+import { useTRPC } from "@/lib/trpc/client";
+import type { Product } from "@server/db/schema/products";
 import {
   Table,
   TableBody,
@@ -16,6 +17,8 @@ export function InfiniteProductsTable() {
   const parentRef = useRef<HTMLDivElement | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
+  const trpc = useTRPC();
+
   const {
     data,
     fetchNextPage,
@@ -23,7 +26,7 @@ export function InfiniteProductsTable() {
   } = trpc.getAllProducts.useInfiniteQuery(
     { limit: 50 },
     {
-      getNextPageParam: (lastPage, pages) => {
+      getNextPageParam: (lastPage: Product[], pages: Product[][]) => {
         const offset = pages.flat().length;
         return lastPage.length ? { limit: 50, offset } : undefined;
       },
