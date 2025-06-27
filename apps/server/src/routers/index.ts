@@ -1,4 +1,3 @@
-import { gt } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "../db";
 import { productStats, products } from "../db/schema/products";
@@ -8,14 +7,23 @@ export const appRouter = router({
 	healthCheck: publicProcedure.query(() => {
 		return "OK";
 	}),
-	getAllProducts: publicProcedure.query(async () => {
-		const allProducts = await db.select().from(products).limit(50).offset(0);
-		await new Promise((resolve) => setTimeout(resolve, 3000));
+       getAllProducts: publicProcedure
+               .input(
+                       z.object({
+                               limit: z.number().optional(),
+                               offset: z.number().optional(),
+                       }),
+               )
+               .query(async ({ input }) => {
+                       const allProducts = await db
+                               .select()
+                               .from(products)
+                               .orderBy(products.id)
+                               .limit(input.limit ?? 20)
+                               .offset(input.offset ?? 0);
 
-		return {
-			products: allProducts,
-		};
-	}),
+                       return allProducts;
+               }),
 	getLatestProductStats: publicProcedure.query(async () => {
 		const latestStats = await db
 			.select()
