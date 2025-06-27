@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { trpc } from "@/lib/trpc/client";
+import { useTRPC } from "@/lib/trpc/client";
 import {
   Table,
   TableBody,
@@ -15,6 +15,8 @@ import {
 export function InfiniteProductsTable() {
   const parentRef = useRef<HTMLDivElement | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+  const trpc = useTRPC();
 
   const {
     data,
