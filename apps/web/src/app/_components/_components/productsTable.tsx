@@ -3,7 +3,7 @@
 import { useRef, useEffect } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { useTRPC } from "@/lib/trpc/client";
-import type { Product } from "@server/db/schema/products";
+
 import {
   Table,
   TableBody,
